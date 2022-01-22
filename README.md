@@ -1,4 +1,4 @@
-# Minecraft
+# Pinecraft
 
 Simple Minecraft-inspired demo written in Python and Pyglet.
 
