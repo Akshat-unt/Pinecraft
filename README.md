@@ -35,7 +35,7 @@ The API could contain functionality for the following:
 ```shell
 pip install pyglet
 git clone https://github.com/Akshat-unt/Pinecraft.git
-cd Minecraft
+cd Pinecraft
 python main.py
 ```
 
