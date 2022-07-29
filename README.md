@@ -17,6 +17,8 @@ I think it would be great to turn the project into more of a library / API... a 
 use / configure to setup a world and run it. Something along these lines...
 
 
+[![BCH compliance](https://bettercodehub.com/edge/badge/Akshat-unt/Pinecraft?branch=main)](https://bettercodehub.com/)
+
 ```python
 import mc
 
