@@ -174,22 +174,21 @@ class Model(object):
 
         # generate the hills randomly
         o = n - 10
+        c = -1  # base of the hill
+        d = 1  # how quickly to taper off the hills
         for _ in xrange(120):
             a = random.randint(-o, o)  # x position of the hill
             b = random.randint(-o, o)  # z position of the hill
-            c = -1  # base of the hill
             h = random.randint(1, 6)  # height of the hill
             s = random.randint(4, 8)  # 2 * s is the side length of the hill
-            d = 1  # how quickly to taper off the hills
             t = random.choice([GRASS, SAND, BRICK])
             for y in xrange(c, c + h):
                 for x in xrange(a - s, a + s + 1):
                     for z in xrange(b - s, b + s + 1):
                         if (x - a) ** 2 + (z - b) ** 2 > (s + 1) ** 2:
                             continue
-                        if (x - 0) ** 2 + (z - 0) ** 2 < 5 ** 2:
-                            continue
-                        self.add_block((x, y, z), t, immediate=False)
+                        if (x - 0) ** 2 + (z - 0) ** 2 >= 5**2:
+                            self.add_block((x, y, z), t, immediate=False)
                 s -= d  # decrement side length so hills taper off
 
     def hit_test(self, position, vector, max_distance=8):
@@ -225,10 +224,7 @@ class Model(object):
 
         """
         x, y, z = position
-        for dx, dy, dz in FACES:
-            if (x + dx, y + dy, z + dz) not in self.world:
-                return True
-        return False
+        return any((x + dx, y + dy, z + dz) not in self.world for dx, dy, dz in FACES)
 
     def add_block(self, position, texture, immediate=True):
         """ Add a block with the given `texture` and `position` to the world.
@@ -286,9 +282,8 @@ class Model(object):
             if self.exposed(key):
                 if key not in self.shown:
                     self.show_block(key)
-            else:
-                if key in self.shown:
-                    self.hide_block(key)
+            elif key in self.shown:
+                self.hide_block(key)
 
     def show_block(self, position, immediate=True):
         """ Show the block at the given `position`. This method assumes the
@@ -648,7 +643,7 @@ class Window(pyglet.window.Window):
                     if tuple(op) not in self.model.world:
                         continue
                     p[i] -= (d - pad) * face[i]
-                    if face == (0, -1, 0) or face == (0, 1, 0):
+                    if face in [(0, -1, 0), (0, 1, 0)]:
                         # You are colliding with the ground or ceiling, so stop
                         # falling / rising.
                         self.dy = 0
